@@ -1,4 +1,4 @@
-package com.flyzebra.flydown;
+package com.flyzebra.flydown.utils;
 /** 
 * 功能说明：
 * @author 作者：FlyZebra 

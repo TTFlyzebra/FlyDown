@@ -1,4 +1,4 @@
-package com.flyzebra.flydown;
+package com.flyzebra.flydown.utils;
 
 import java.io.Closeable;
 import java.io.IOException;

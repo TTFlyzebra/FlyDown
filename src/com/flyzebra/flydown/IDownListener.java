@@ -4,11 +4,11 @@ package com.flyzebra.flydown;
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年2月27日 下午1:55:43  
 */
-public interface IDownEvent {
+public interface IDownListener {
 
 	public void onError(String url);
 	
 	public void onFail(String url);
 	
-	public void onSuccese(String url);
+	public void onFinish(String url);
 }
