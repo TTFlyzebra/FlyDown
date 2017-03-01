@@ -9,14 +9,19 @@ import java.security.NoSuchAlgorithmException;
  */
 public class EncodeHelper {
 
-    public static String md5(String key) {
+	/**
+	 * 求字符串的MD5值
+	 * @param str 求MD5的字符串
+	 * @return 返回字符串的MD5值
+	 */
+    public static String md5(String str) {
         String cacheKey;
         try {
             final MessageDigest mDigest = MessageDigest.getInstance("MD5");
-            mDigest.update(key.getBytes());
+            mDigest.update(str.getBytes());
             cacheKey = bytesToHexString(mDigest.digest());
         } catch (NoSuchAlgorithmException e) {
-            cacheKey = String.valueOf(key.hashCode());
+            cacheKey = String.valueOf(str.hashCode());
         } catch (NullPointerException e){
             cacheKey = "null";
         }
