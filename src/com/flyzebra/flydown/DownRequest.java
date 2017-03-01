@@ -8,7 +8,7 @@ import com.flyzebra.flydown.utils.FlyLog;
  * @author 作者：FlyZebra
  * @version 创建时间：2017年2月28日 上午10:11:57
  */
-public class DownRequest {
+public class DownRequest {	
 
 	/**
 	 * 下载地址
