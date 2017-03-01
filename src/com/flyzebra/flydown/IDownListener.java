@@ -6,9 +6,11 @@ package com.flyzebra.flydown;
 */
 public interface IDownListener {
 
-	public void onError(String url);
+	public void Error(String url,int ErrorCode);
 	
-	public void onFail(String url);
+	public void Fail(String url);
 	
-	public void onFinish(String url);
+	public void Finish(String url);
+	
+	public void progress(String url, long downBytes, long sumBytes);
 }

@@ -11,31 +11,37 @@ public class TestMain{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		FlyLog.d("--start ----test ----\n");
+		FlyLog.d("--start ----test ----"+Long.toHexString(Long.MAX_VALUE)+"--"+Long.parseLong("10",16)+"\n");
 		String downUrl = "http://127.0.0.1:8080/video/tsy1.mp4";
 		IDownListener listener = new IDownListener() {
 			
 			@Override
-			public void onFinish(String url) {
+			public void Finish(String url) {
 				// TODO Auto-generated method stub
 				FlyLog.d("--onFinish----"+url+"\n");
 			}
 			
 			@Override
-			public void onFail(String url) {
+			public void Fail(String url) {
 				// TODO Auto-generated method stub
 			}
 			
 			@Override
-			public void onError(String url) {
+			public void Error(String url,int ErrorCode) {
 				// TODO Auto-generated method stub
 			}
+
+			@Override
+			public void progress(String url, long downBytes, long sumBytes) {
+				// TODO Auto-generated method stub
+				
+			}
 		};
-		FlyDown.load("http://127.0.0.1:8080/video/tsy1.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy3.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy4.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy5.mp4").listener(listener).start();
+		FlyDown.load(downUrl).listener(listener).start();
+		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();
+		FlyDown.load("http://127.0.0.1:8080/video/tsy3.mp4").listener(listener).start();
+		FlyDown.load("http://127.0.0.1:8080/video/tsy4.mp4").listener(listener).start();
+		FlyDown.load("http://127.0.0.1:8080/video/tsy5.mp4").listener(listener).start();
 		FlyLog.d("--end ----test ----\n");
 	}
 

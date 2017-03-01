@@ -8,7 +8,7 @@ import java.io.IOException;
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年2月27日 下午2:46:11  
 */
-public class CloseableUtils {
+public class CloseableUtil {
 
 	public static void Close(Closeable closeable){
 		if(closeable!=null){

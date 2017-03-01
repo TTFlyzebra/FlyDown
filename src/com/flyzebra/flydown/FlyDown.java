@@ -13,6 +13,6 @@ public class FlyDown {
 	
 	public static DownRequest load(String url){
 		DownManager dmg = DownManager.getInstace();
-		return dmg.setUrl(url);
+		return dmg.setDownUrl(url);
 	}
 }

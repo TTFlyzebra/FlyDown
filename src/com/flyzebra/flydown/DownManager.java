@@ -6,7 +6,6 @@ package com.flyzebra.flydown;
 */
 public class DownManager {
 	private static DownManager INSTACE = new DownManager();
-	private String downUrl;
 	public static DownManager getInstace() {
 		// TODO Auto-generated method stub
 		return INSTACE;
@@ -17,7 +16,7 @@ public class DownManager {
 	 * @param url下载地址
 	 * @return DownRequest实例
 	 */
-	public DownRequest setUrl(String url) {
+	public synchronized DownRequest setDownUrl(String url) {
 		// TODO Auto-generated method stub
 		DownRequest dr = new DownRequest(url);
 		return dr;
