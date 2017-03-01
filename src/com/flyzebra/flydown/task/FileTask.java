@@ -1,4 +1,4 @@
-package com.flyzebra.flydown.dataio;
+package com.flyzebra.flydown.task;
 
 import java.util.Vector;
 
@@ -9,19 +9,19 @@ import com.flyzebra.flydown.utils.EncodeHelper;
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年3月1日 下午2:27:13  
 */
-public class FileInfo {
+public class FileTask {
 	
 	private String saveName = null;
 	
 	private Vector<FileBlock> fileBlocks = null;
 	
-	public FileInfo(String url){
+	public FileTask(String url){
 		String md5 = EncodeHelper.md5(url);
 		saveName = "."+md5+".tmp";
 		fileBlocks = new Vector<>();
 	}
 	
-	public static FileInfo create(String url){
-		return new FileInfo(url);
+	public static FileTask create(String url){
+		return new FileTask(url);
 	}
 }

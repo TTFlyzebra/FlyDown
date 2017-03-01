@@ -1,16 +1,17 @@
-package com.flyzebra.flydown;
+package com.flyzebra.flydown.task;
 /** 
 * 功能说明：
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年2月27日 下午1:55:43  
 */
-public interface IDownListener {
+public interface IFileTaskListener {
 
 	public void Error(String url,int ErrorCode);
 	
-	public void Fail(String url);
-	
 	public void Finish(String url);
 	
-	public void progress(String url, long downBytes, long sumBytes);
+	public void Pause(String url);
+	
+	public void Progress(String url, long downBytes, long sumBytes);
+	
 }

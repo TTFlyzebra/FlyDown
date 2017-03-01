@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.flyzebra.flydown.IDownListener;
+import com.flyzebra.flydown.task.IFileTaskListener;
 import com.flyzebra.flydown.utils.CloseableUtil;
 import com.flyzebra.flydown.utils.FlyLog;
 
@@ -22,8 +22,8 @@ public class HttpTask implements Runnable {
 	private static final int CONNECT_TIME = 15;
 	private String saveFile;
 	private String downUrl;
-	private IDownListener iDownListener;
-	public HttpTask(String downUrl,String saveFile,IDownListener iDownListener) {
+	private IFileTaskListener iDownListener;
+	public HttpTask(String downUrl,String saveFile,IFileTaskListener iDownListener) {
 		this.downUrl = downUrl;
 		this.saveFile = saveFile;
 		this.iDownListener = iDownListener;
@@ -31,7 +31,7 @@ public class HttpTask implements Runnable {
 
 	@Override
 	public void run() {
-		HttpURLConnection urlConnection = null;
+		HttpURLConnection con = null;
 		InputStream ins = null;
 		RandomAccessFile ous = null;
 		try {
@@ -41,14 +41,15 @@ public class HttpTask implements Runnable {
 		}
 		try {
 			final URL url = new URL(downUrl);
-			urlConnection = (HttpURLConnection) url.openConnection();
-			urlConnection.setConnectTimeout(CONNECT_TIME);
-			urlConnection.setReadTimeout(CONNECT_TIME);
-			int fileLength = urlConnection.getContentLength();
+			con = (HttpURLConnection) url.openConnection();
+			con.setConnectTimeout(CONNECT_TIME);
+			con.setReadTimeout(CONNECT_TIME);
+			con.setRequestProperty("RANGE", "bytes=0-");
+			int fileLength = con.getContentLength();
 			FlyLog.d(url + " file size = " + fileLength + "\n");
 			// urlConnection.setDoInput(true);
-			if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-				ins = urlConnection.getInputStream();
+			if (con.getResponseCode() == HttpURLConnection.HTTP_OK||con.getResponseCode() == HttpURLConnection.HTTP_PARTIAL) {
+				ins = con.getInputStream();
 				byte[] b = new byte[1024];
 				int nRead = 0;
 				long size = 0;
@@ -61,13 +62,14 @@ public class HttpTask implements Runnable {
 					iDownListener.Finish(downUrl);
 				}
 			} else {
+				FlyLog.d("ResponseCode = "+con.getResponseCode());
 				// TODO:添加其它HTTP返回码的处理信息
 			}
 		} catch (final IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (urlConnection != null) {
-				urlConnection.disconnect();
+			if (con != null) {
+				con.disconnect();
 			}
 			CloseableUtil.Close(ins);
 			CloseableUtil.Close(ous);

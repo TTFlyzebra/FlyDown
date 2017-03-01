@@ -1,4 +1,7 @@
 package com.flyzebra.flydown;
+
+import com.flyzebra.flydown.task.DownTask;
+
 /** 
 * 功能说明：用户操作接口封装
 * @author 作者：FlyZebra 
@@ -11,8 +14,8 @@ public class FlyDown {
 		return this;
 	}
 	
-	public static DownRequest load(String url){
-		DownManager dmg = DownManager.getInstace();
-		return dmg.setDownUrl(url);
+	public static DownTask load(String url){
+		TaskManager dmg = TaskManager.getInstace();
+		return dmg.addDownUrl(url);
 	}
 }

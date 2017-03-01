@@ -1,5 +1,6 @@
-package com.flyzebra.flydown;
+package com.flyzebra.flydown.task;
 
+import com.flyzebra.flydown.network.HandleTaskFactory;
 import com.flyzebra.flydown.utils.FlyLog;
 
 /**
@@ -8,7 +9,7 @@ import com.flyzebra.flydown.utils.FlyLog;
  * @author 作者：FlyZebra
  * @version 创建时间：2017年2月28日 上午10:11:57
  */
-public class DownRequest {	
+public class DownTask {	
 
 	/**
 	 * 下载地址
@@ -27,7 +28,7 @@ public class DownRequest {
 	/**
 	 * 下载信息监听接口
 	 */
-	private IDownListener iDownListener = null;
+	private IFileTaskListener iDownListener = null;
 
 	/**
 	 * 构造函数，生成实例
@@ -35,7 +36,7 @@ public class DownRequest {
 	 * @param url
 	 *            下载地址
 	 */
-	public DownRequest(String url) {
+	public DownTask(String url) {
 		downUrl = url;
 	}
 
@@ -43,7 +44,7 @@ public class DownRequest {
 		return downUrl;
 	}
 
-	public DownRequest setDownUrl(String downUrl) {
+	public DownTask setDownUrl(String downUrl) {
 		this.downUrl = downUrl;
 		return this;
 	}
@@ -52,7 +53,7 @@ public class DownRequest {
 		return tdNum;
 	}
 
-	public DownRequest setTdNum(int tdNum) {
+	public DownTask setTdNum(int tdNum) {
 		this.tdNum = tdNum;
 		return this;
 	}
@@ -61,16 +62,16 @@ public class DownRequest {
 		return saveFile;
 	}
 
-	public DownRequest setSaveFile(String saveFile) {
+	public DownTask setSaveFile(String saveFile) {
 		this.saveFile = saveFile;
 		return this;
 	}
 
-	public IDownListener getiDownListener() {
+	public IFileTaskListener getiDownListener() {
 		return iDownListener;
 	}
 
-	public DownRequest listener(IDownListener iDownListener) {
+	public DownTask listener(IFileTaskListener iDownListener) {
 		this.iDownListener = iDownListener;
 		return this;
 	}
@@ -100,6 +101,6 @@ public class DownRequest {
 		// httpDown.setSavaFilePath(saveFile);
 		// httpDown.setUrl(downUrl);
 		// httpDown.start();
-		HandleRequestFactory.creat(downUrl).handle(this);
+		HandleTaskFactory.creat(downUrl).handle(this);
 	}
 }
