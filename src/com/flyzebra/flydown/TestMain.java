@@ -11,7 +11,7 @@ public class TestMain{
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		FlyLog.d("--start ----test ----"+Long.toHexString(Long.MAX_VALUE)+"--"+Long.parseLong("10",16)+"\n");
+		FlyLog.d("-----start main-----\n");
 		String downUrl = "http://127.0.0.1:8080/video/tsy1.mp4";
 		IDownListener listener = new IDownListener() {
 			
@@ -38,11 +38,11 @@ public class TestMain{
 			}
 		};
 		FlyDown.load(downUrl).listener(listener).start();
-		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();
-		FlyDown.load("http://127.0.0.1:8080/video/tsy3.mp4").listener(listener).start();
-		FlyDown.load("http://127.0.0.1:8080/video/tsy4.mp4").listener(listener).start();
-		FlyDown.load("http://127.0.0.1:8080/video/tsy5.mp4").listener(listener).start();
-		FlyLog.d("--end ----test ----\n");
+//		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();
+//		FlyDown.load("http://127.0.0.1:8080/video/tsy3.mp4").listener(listener).start();
+//		FlyDown.load("http://127.0.0.1:8080/video/tsy4.mp4").listener(listener).start();
+//		FlyDown.load("http://127.0.0.1:8080/video/tsy5.mp4").listener(listener).start();
+		FlyLog.d("-----end main-----\n");
 	}
 
 	
