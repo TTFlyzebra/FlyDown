@@ -1,6 +1,6 @@
 package com.flyzebra.flydown.network;
 
-import com.flyzebra.flydown.task.DownTask;
+import com.flyzebra.flydown.task.SingleDownTask;
 
 /** 
 * 功能说明：
@@ -13,5 +13,5 @@ public interface IHandleTask {
 	 * 處理下載
 	 * @param downRequest
 	 */
-	void handle(DownTask downRequest);
+	void handle(SingleDownTask downRequest);
 }

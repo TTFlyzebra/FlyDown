@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.flyzebra.flydown.task.IFileTaskListener;
+import com.flyzebra.flydown.task.IDownTaskEvent;
 import com.flyzebra.flydown.utils.CloseableUtil;
 import com.flyzebra.flydown.utils.FlyLog;
 
@@ -22,8 +22,8 @@ public class HttpTask implements Runnable {
 	private static final int CONNECT_TIME = 15;
 	private String saveFile;
 	private String downUrl;
-	private IFileTaskListener iDownListener;
-	public HttpTask(String downUrl,String saveFile,IFileTaskListener iDownListener) {
+	private IDownTaskEvent iDownListener;
+	public HttpTask(String downUrl,String saveFile,IDownTaskEvent iDownListener) {
 		this.downUrl = downUrl;
 		this.saveFile = saveFile;
 		this.iDownListener = iDownListener;
