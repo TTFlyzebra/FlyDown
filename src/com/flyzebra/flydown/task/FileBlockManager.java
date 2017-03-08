@@ -4,7 +4,7 @@ package com.flyzebra.flydown.task;
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年3月1日 下午1:47:37  
 */
-public class FileBlock {
+public class FileBlockManager {
 	public long startPos;
 	public long downPos;
 	public long endPos;	
@@ -14,7 +14,7 @@ public class FileBlock {
 	 * @param downPos 已经下载到的点
 	 * @param endPos 下载结束点
 	 */
-	public FileBlock(long startPos, long downPos, long endPos) {
+	public FileBlockManager(long startPos, long downPos, long endPos) {
 		this.startPos=startPos;
 		this.downPos=downPos;
 		this.endPos=endPos;
@@ -25,7 +25,7 @@ public class FileBlock {
 	 * @param str 必须遵守约定格式(三个16进制字符串，三个变量中间用字母X隔开，结束用字母E)
 	 * @return FileBlock实例
 	 */
-	public static FileBlock create(String str){
+	public static FileBlockManager create(String str){
 		if(str==null||str.length()==0){
 			return null;
 		}
@@ -34,7 +34,7 @@ public class FileBlock {
 			long startPos = Long.parseLong(ss[0], 16);
 			long downPos = Long.parseLong(ss[1], 16);
 			long endPos = Long.parseLong(ss[2], 16);
-			return new FileBlock(startPos,downPos,endPos);
+			return new FileBlockManager(startPos,downPos,endPos);
 		}
 		return null;
 	}
