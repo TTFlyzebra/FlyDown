@@ -4,7 +4,7 @@ package com.flyzebra.flydown.task;
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年2月27日 下午1:55:43  
 */
-public interface IFileTaskListener {
+public interface IDownTaskEvent {
 
 	public void Error(String url,int ErrorCode);
 	

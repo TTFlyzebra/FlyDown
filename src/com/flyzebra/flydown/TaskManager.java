@@ -2,9 +2,7 @@ package com.flyzebra.flydown;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import com.flyzebra.flydown.task.DownTask;
-import com.flyzebra.flydown.task.FileTask;
+import com.flyzebra.flydown.task.SingleDownTask;
 
 /** 
 * 功能说明：下载任务管理，添加下载任务，删除下载任务，暂停下载任务
@@ -13,7 +11,7 @@ import com.flyzebra.flydown.task.FileTask;
 */
 public class TaskManager {
 	private static TaskManager INSTACE = new TaskManager();
-	private List<DownTask> DownTask = new ArrayList<>();
+	private List<SingleDownTask> downTaskList = new ArrayList<>();
 	public static TaskManager getInstace() {
 		return INSTACE;
 	}
@@ -23,9 +21,9 @@ public class TaskManager {
 	 * @param url下载地址
 	 * @return DownRequest实例
 	 */
-	public synchronized DownTask addDownUrl(String url) {
-		DownTask dr = new DownTask(url);
-		DownTask.add(dr);
+	public synchronized SingleDownTask addDownUrl(String url) {
+		SingleDownTask dr = new SingleDownTask(url);
+		downTaskList.add(dr);
 		return dr;
 	}
 	
