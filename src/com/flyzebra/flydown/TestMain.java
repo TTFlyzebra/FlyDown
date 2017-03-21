@@ -1,6 +1,6 @@
 package com.flyzebra.flydown;
 
-import com.flyzebra.flydown.task.IDownTaskEvent;
+import com.flyzebra.flydown.request.IFileReQuestListener;
 import com.flyzebra.flydown.utils.FlyLog;
 import com.flyzebra.flydown.utils.HttpUtils;
 
@@ -12,42 +12,39 @@ import com.flyzebra.flydown.utils.HttpUtils;
 public class TestMain{
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		FlyLog.d("-----start main-----\n");
 		String downUrl = "http://127.0.0.1:8080/video/tsy1.mp4";
-		IDownTaskEvent listener = new IDownTaskEvent() {
+		IFileReQuestListener listener = new IFileReQuestListener() {
 
 			@Override
 			public void Error(String url, int ErrorCode) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void Finish(String url) {
-				// TODO Auto-generated method stub
 				FlyLog.d("--onFinish----%s\n",url);
 			}
 
 			@Override
 			public void Pause(String url) {
-				// TODO Auto-generated method stub
 				
 			}
 
 			@Override
 			public void Progress(String url, long downBytes, long sumBytes) {
-				// TODO Auto-generated method stub
 				
 			}
 		};
-		FlyDown.load(downUrl).listener(listener).start();
+		FlyDown.load(downUrl).listener(listener).goStart();
+		
+		
 //		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();
 //		FlyDown.load("http://127.0.0.1:8080/video/tsy3.mp4").listener(listener).start();
 //		FlyDown.load("http://127.0.0.1:8080/video/tsy4.mp4").listener(listener).start();
 //		FlyDown.load("http://127.0.0.1:8080/video/tsy5.mp4").listener(listener).start();
 		
-		FlyLog.d("sina l = %d \n",HttpUtils.getLength("http://www.sina.com.cn"));
+		FlyLog.d("file l = %d \n",HttpUtils.getLength("http://127.0.0.1:8080/video/fly.avi"));
 		
 		FlyLog.d("-----end main-----\n");
 	}

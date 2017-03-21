@@ -1,40 +1,42 @@
-package com.flyzebra.flydown.task;
+package com.flyzebra.flydown.request;
 /** 
 * 功能说明：
 * @author 作者：FlyZebra 
 * @version 创建时间：2017年3月1日 下午1:47:37  
 */
-public class FileBlockManager {
-	public long startPos;
-	public long downPos;
+public class FileBlock {
+	public static final String SPLIT_A = "E";
+	public static final String SPLIT_B = "X";
+	public Object tag;
+	public int order;
+	public long staPos;
 	public long endPos;	
+	public int state;
 	/**
 	 * 构造函数
 	 * @param startPos 下载起始点
 	 * @param downPos 已经下载到的点
 	 * @param endPos 下载结束点
 	 */
-	public FileBlockManager(long startPos, long downPos, long endPos) {
-		this.startPos=startPos;
-		this.downPos=downPos;
+	public FileBlock(long staPos, long endPos) {
+		this.staPos=staPos;
 		this.endPos=endPos;
 	}
 
 	/**
 	 * 将字符串转为FileBlock对像
 	 * @param str 必须遵守约定格式(三个16进制字符串，三个变量中间用字母X隔开，结束用字母E)
-	 * @return FileBlock实例
+	 * @return FileBlock实例，创建失败返回null
 	 */
-	public static FileBlockManager create(String str){
+	public static FileBlock create(String str){
 		if(str==null||str.length()==0){
 			return null;
 		}
-		String ss[] = str.split("X");
-		if(ss.length==3){
-			long startPos = Long.parseLong(ss[0], 16);
-			long downPos = Long.parseLong(ss[1], 16);
-			long endPos = Long.parseLong(ss[2], 16);
-			return new FileBlockManager(startPos,downPos,endPos);
+		String strs[] = str.split("X");
+		if(strs.length==3){
+			long startPos = Long.parseLong(strs[0], 16);
+			long endPos = Long.parseLong(strs[2], 16);
+			return new FileBlock(startPos,endPos);
 		}
 		return null;
 	}
@@ -46,12 +48,10 @@ public class FileBlockManager {
 	public String toString() {
 		//TODO: 需添加异常错误处理
 		StringBuffer sb = new StringBuffer();
-		sb.append(Long.toHexString(startPos))
-		.append("X")
-		.append(Long.toHexString(downPos))
-		.append("X")
+		sb.append(Long.toHexString(staPos))
+		.append(SPLIT_B)
 		.append(Long.toHexString(endPos))
-		.append("E");
+		.append(SPLIT_A);
 		return sb.toString();
 	}
 }

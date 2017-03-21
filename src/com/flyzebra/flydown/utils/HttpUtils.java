@@ -12,19 +12,19 @@ import java.net.URL;
 */
 public class HttpUtils {
 	/**
-	 * 检测downUrl是否支持断点续传，网络请求，尽量在线程是调用
+	 * 检测downUrl是否支持断点续传，网络请求，尽量在线程中调用
 	 * @param downUrl
 	 * @return
 	 */
-	public static int getLength(String downUrl){
+	public static long getLength(String downUrl){
 		URL url;
 		HttpURLConnection con = null;
-		int fileLength = 0;
+		long fileLength = 0;
 		try {
 			url = new URL(downUrl);
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestProperty("RANGE", "bytes=0-");
-			fileLength = con.getContentLength();
+			fileLength = con.getContentLengthLong();
 		} catch (MalformedURLException e) {
 			FlyLog.d(e.toString());
 			e.printStackTrace();

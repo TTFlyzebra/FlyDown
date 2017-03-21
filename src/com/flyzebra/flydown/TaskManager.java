@@ -1,8 +1,13 @@
+
 package com.flyzebra.flydown;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.flyzebra.flydown.task.SingleDownTask;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import com.flyzebra.flydown.request.IFileReQuest;
+import com.flyzebra.flydown.request.SingleDownTask;
 
 /** 
 * 功能说明：下载任务管理，添加下载任务，删除下载任务，暂停下载任务
@@ -11,7 +16,7 @@ import com.flyzebra.flydown.task.SingleDownTask;
 */
 public class TaskManager {
 	private static TaskManager INSTACE = new TaskManager();
-	private List<SingleDownTask> downTaskList = new ArrayList<>();
+	private BlockingQueue<IFileReQuest> fileRequestQueue = new LinkedBlockingQueue<>();
 	public static TaskManager getInstace() {
 		return INSTACE;
 	}
@@ -21,13 +26,13 @@ public class TaskManager {
 	 * @param url下载地址
 	 * @return DownRequest实例
 	 */
-	public synchronized SingleDownTask addDownUrl(String url) {
-		SingleDownTask dr = new SingleDownTask(url);
-		downTaskList.add(dr);
-		return dr;
+	public synchronized IFileReQuest addReQuest(String url) {
+		IFileReQuest fileQequest = new SingleDownTask(url);
+		fileRequestQueue.add(fileQequest);
+		return fileQequest;
 	}
 	
-	public synchronized void removeDownUrl(String url){
+	public synchronized void cancleRequest(String url){
 		//TODO 删除下载任务
 	}
 }

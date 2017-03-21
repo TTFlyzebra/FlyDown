@@ -1,12 +1,7 @@
-package com.flyzebra.flydown.task;
+package com.flyzebra.flydown.request;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-
-import com.flyzebra.flydown.network.HandleTaskFactory;
+import com.flyzebra.flydown.network.TaskFactory;
+import com.flyzebra.flydown.utils.EncodeHelper;
 import com.flyzebra.flydown.utils.FlyLog;
 import com.flyzebra.flydown.utils.HttpUtils;
 
@@ -16,7 +11,9 @@ import com.flyzebra.flydown.utils.HttpUtils;
  * @author 作者：FlyZebra
  * @version 创建时间：2017年2月28日 上午10:11:57
  */
-public class SingleDownTask extends Thread{	
+public class SingleDownTask implements IFileReQuest,IFileBlockReQuestListener{	
+	
+	private FileBlockList fileBlockTasks;
 
 	/**
 	 * 下载地址
@@ -35,7 +32,7 @@ public class SingleDownTask extends Thread{
 	/**
 	 * 下载信息监听接口
 	 */
-	private IDownTaskEvent iDownListener = null;
+	private IFileReQuestListener iDownListener = null;
 
 	/**
 	 * 构造函数，生成实例
@@ -49,11 +46,6 @@ public class SingleDownTask extends Thread{
 
 	public String getDownUrl() {
 		return downUrl;
-	}
-
-	public SingleDownTask setDownUrl(String downUrl) {
-		this.downUrl = downUrl;
-		return this;
 	}
 
 	public int getTdNum() {
@@ -74,21 +66,11 @@ public class SingleDownTask extends Thread{
 		return saveFile;
 	}
 
-	/**
-	 * 设置下载后保存文件的文件名
-	 * @param saveFile
-	 * @return
-	 */
-	public SingleDownTask savefile(String saveFile) {
-		this.saveFile = saveFile;
-		return this;
-	}
-	
-	public IDownTaskEvent getiDownListener(){
+	public IFileReQuestListener getiDownListener(){
 		return this.iDownListener;
 	}
 
-	public SingleDownTask listener(IDownTaskEvent iDownListener) {
+	public SingleDownTask listener(IFileReQuestListener iDownListener) {
 		this.iDownListener = iDownListener;
 		return this;
 	}
@@ -98,8 +80,11 @@ public class SingleDownTask extends Thread{
 		return "DownRequest [downUrl=" + downUrl + ", tdNum=" + threadNum + ", saveFilePath=" + saveFile + ", iDownListener=" + iDownListener + "]";
 	}
 	
-	@Override
-	public void run() {
+
+	/**
+	 * 开始执行下载请求
+	 */
+	public void goStart() {
 		if (downUrl == null) {
 			FlyLog.d("无效的下载地址!");
 			return;
@@ -109,23 +94,46 @@ public class SingleDownTask extends Thread{
 		}
 		
 		//读取已下载信息
-	
-		//获取下载文件大小，检测服务器是否支持断点续传
-		int fileLength = HttpUtils.getLength(downUrl);
-		
-		if(fileLength>0){
+		fileBlockTasks = new FileBlockList(downUrl,threadNum);
 			
+		//获取下载文件大小，检测服务器是否支持断点续传
+//		long fileLength = HttpUtils.getLength(downUrl);
+//		
+//		if(fileLength>0){
+//			
+//		}
+		
+		for(FileBlock fileBlock:fileBlockTasks.getFileBlocks()){
+			TaskFactory.creat(downUrl).setFileBlock(fileBlock).setSingleDownTask(this).setFileBlockEnvent(this).handle();
 		}
 		
 		//运行下载线程
-		HandleTaskFactory.creat(downUrl).handle(this);
+//		HandleTaskFactory.creat(downUrl).handle(this);
 	}
 
-	/**
-	 * 开始执行下载请求
-	 */
 	@Override
-	public void start() {
-		super.start();
+	public void Error(FileBlock fileBlock, int ErrorCode) {
+	}
+
+	@Override
+	public void Finish(FileBlock fileBlock) {
+	}
+
+	@Override
+	public IFileReQuest setUrl(String downUrl) {
+		this.downUrl = downUrl;
+		return this;
+	}
+
+	@Override
+	public IFileReQuest setSaveFile(String saveFile) {
+		this.saveFile = saveFile;
+		return this;
+	}
+
+	@Override
+	public void cancle() {
+		// TODO Auto-generated method stub
+		
 	}
 }
