@@ -1,5 +1,7 @@
 package com.flyzebra.flydown.network;
 
+import com.flyzebra.flydown.task.FileBlock;
+import com.flyzebra.flydown.task.IFileBlockEnvent;
 import com.flyzebra.flydown.task.SingleDownTask;
 
 /** 
@@ -9,9 +11,14 @@ import com.flyzebra.flydown.task.SingleDownTask;
 */
 public interface IHandleTask {
 	
+	IHandleTask setFileBlock(FileBlock fileBlock);
+	
+	IHandleTask setSingleDownTask(SingleDownTask singleDownTask);
 	/**
 	 * 處理下載
 	 * @param downRequest
 	 */
-	void handle(SingleDownTask downRequest);
+	void handle();
+
+	IHandleTask setFileBlockEnvent(IFileBlockEnvent iFileBlockEnvent); 
 }

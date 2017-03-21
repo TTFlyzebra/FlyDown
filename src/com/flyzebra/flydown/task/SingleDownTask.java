@@ -1,12 +1,7 @@
 package com.flyzebra.flydown.task;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
-
 import com.flyzebra.flydown.network.HandleTaskFactory;
+import com.flyzebra.flydown.utils.EncodeHelper;
 import com.flyzebra.flydown.utils.FlyLog;
 import com.flyzebra.flydown.utils.HttpUtils;
 
@@ -16,7 +11,9 @@ import com.flyzebra.flydown.utils.HttpUtils;
  * @author 作者：FlyZebra
  * @version 创建时间：2017年2月28日 上午10:11:57
  */
-public class SingleDownTask extends Thread{	
+public class SingleDownTask extends Thread implements IFileBlockEnvent{	
+	
+	private FileBlockTasks fileBlockTasks;
 
 	/**
 	 * 下载地址
@@ -35,7 +32,7 @@ public class SingleDownTask extends Thread{
 	/**
 	 * 下载信息监听接口
 	 */
-	private IDownTaskEvent iDownListener = null;
+	private IDownTaskEnvent iDownListener = null;
 
 	/**
 	 * 构造函数，生成实例
@@ -84,11 +81,11 @@ public class SingleDownTask extends Thread{
 		return this;
 	}
 	
-	public IDownTaskEvent getiDownListener(){
+	public IDownTaskEnvent getiDownListener(){
 		return this.iDownListener;
 	}
 
-	public SingleDownTask listener(IDownTaskEvent iDownListener) {
+	public SingleDownTask listener(IDownTaskEnvent iDownListener) {
 		this.iDownListener = iDownListener;
 		return this;
 	}
@@ -109,16 +106,21 @@ public class SingleDownTask extends Thread{
 		}
 		
 		//读取已下载信息
-	
-		//获取下载文件大小，检测服务器是否支持断点续传
-		int fileLength = HttpUtils.getLength(downUrl);
-		
-		if(fileLength>0){
+		fileBlockTasks = new FileBlockTasks(downUrl,threadNum);
 			
+		//获取下载文件大小，检测服务器是否支持断点续传
+//		long fileLength = HttpUtils.getLength(downUrl);
+//		
+//		if(fileLength>0){
+//			
+//		}
+		
+		for(FileBlock fileBlock:fileBlockTasks.fileBlocks){
+			HandleTaskFactory.creat(downUrl).setFileBlock(fileBlock).setSingleDownTask(this).setFileBlockEnvent(this).handle();
 		}
 		
 		//运行下载线程
-		HandleTaskFactory.creat(downUrl).handle(this);
+//		HandleTaskFactory.creat(downUrl).handle(this);
 	}
 
 	/**
@@ -127,5 +129,13 @@ public class SingleDownTask extends Thread{
 	@Override
 	public void start() {
 		super.start();
+	}
+
+	@Override
+	public void Error(FileBlock fileBlock, int ErrorCode) {
+	}
+
+	@Override
+	public void Finish(FileBlock fileBlock) {
 	}
 }

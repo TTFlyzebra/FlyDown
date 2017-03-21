@@ -8,7 +8,8 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.flyzebra.flydown.task.IDownTaskEvent;
+import com.flyzebra.flydown.task.FileBlock;
+import com.flyzebra.flydown.task.IDownTaskEnvent;
 import com.flyzebra.flydown.utils.CloseableUtil;
 import com.flyzebra.flydown.utils.FlyLog;
 
@@ -22,11 +23,13 @@ public class HttpTask implements Runnable {
 	private static final int CONNECT_TIME = 15;
 	private String saveFile;
 	private String downUrl;
-	private IDownTaskEvent iDownListener;
-	public HttpTask(String downUrl,String saveFile,IDownTaskEvent iDownListener) {
+	private IDownTaskEnvent iDownListener;
+	private FileBlock fileBlock;
+	public HttpTask(String downUrl,String saveFile,IDownTaskEnvent iDownListener,FileBlock fileBlock) {
 		this.downUrl = downUrl;
 		this.saveFile = saveFile;
 		this.iDownListener = iDownListener;
+		this.fileBlock = fileBlock;
 	}
 
 	@Override
@@ -42,9 +45,9 @@ public class HttpTask implements Runnable {
 		try {
 			final URL url = new URL(downUrl);
 			con = (HttpURLConnection) url.openConnection();
-			con.setConnectTimeout(CONNECT_TIME);
-			con.setReadTimeout(CONNECT_TIME);
-			con.setRequestProperty("RANGE", "bytes=0-");
+//			con.setConnectTimeout(CONNECT_TIME);
+//			con.setReadTimeout(CONNECT_TIME);
+			con.setRequestProperty("RANGE", "bytes="+fileBlock.startPos+"-"+fileBlock.endPos);
 			int fileLength = con.getContentLength();
 			FlyLog.d(url + " file size = " + fileLength + "\n");
 			// urlConnection.setDoInput(true);
@@ -54,7 +57,9 @@ public class HttpTask implements Runnable {
 				int nRead = 0;
 				long size = 0;
 				while ((nRead = ins.read(b, 0, 1024)) > 0) {
-					ous.write(b, 0, nRead);
+//					ous.write(b, 0, nRead);
+					ous.seek(fileBlock.startPos+size);
+					ous.write(b);
 					size = size + nRead;
 				}
 				FlyLog.d(url + " read size = " + size + "\n");
