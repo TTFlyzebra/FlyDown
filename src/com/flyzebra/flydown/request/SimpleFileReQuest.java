@@ -24,6 +24,8 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 	private IFileReQuestListener iFileReQuestListener;
 	private IFileBlockQueue iFileBlockQueue;
 	
+	//添加原子操作数判断下载是否完成
+	
 	public SimpleFileReQuest(String downUrl){
 		this.downUrl = downUrl;
 	}
@@ -32,19 +34,25 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 			new SynchronousQueue<Runnable>());
 
 	@Override
-	public IFileReQuest setUrl(String downUrl) {
+	public SimpleFileReQuest setUrl(String downUrl) {
 		this.downUrl = downUrl;
 		return this;
 	}
 
 	@Override
-	public IFileReQuest setSaveFile(String saveFile) {
+	public SimpleFileReQuest setSaveFile(String saveFile) {
 		this.saveFile = saveFile;
+		return this;
+	}
+	
+	@Override
+	public SimpleFileReQuest setThread(int threadNum) {
+		this.threadNum = threadNum;
 		return this;
 	}
 
 	@Override
-	public IFileReQuest listener(IFileReQuestListener iFileReQuestListener) {
+	public SimpleFileReQuest listener(IFileReQuestListener iFileReQuestListener) {
 		this.iFileReQuestListener = iFileReQuestListener;
 		return this;
 	}

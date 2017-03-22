@@ -20,6 +20,8 @@ public interface IFileReQuest {
 	 */
 	IFileReQuest setSaveFile(String saveFile);
 	
+	IFileReQuest setThread(int threadNum);
+	
 	
 	/**
 	 * 设置文件下载状态监听

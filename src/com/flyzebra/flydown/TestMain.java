@@ -36,7 +36,7 @@ public class TestMain{
 				
 			}
 		};
-		FlyDown.load(downUrl).listener(listener).goStart();
+		FlyDown.load(downUrl).setThread(1000).listener(listener).goStart();
 		
 		
 //		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();

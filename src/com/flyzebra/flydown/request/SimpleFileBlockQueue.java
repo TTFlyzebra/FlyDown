@@ -76,14 +76,12 @@ public class SimpleFileBlockQueue implements IFileBlockQueue {
 			}
 		}else{
 			long length = HttpUtils.getLength(downUrl);
-			FileBlock fileBlockData = new FileBlock();
-			fileBlockData.setStaPos(0);
-			fileBlockData.setEndPos(length/2);
-			fileBlockQueue.add(fileBlockData);
-			FileBlock fileBlockData1 = new FileBlock();
-			fileBlockData1.setStaPos(length/2);
-			fileBlockData1.setEndPos(length);
-			fileBlockQueue.add(fileBlockData1);
+			for(int i=0;i<threadNum;i++){
+				FileBlock fileBlockData = new FileBlock();
+				fileBlockData.setStaPos(length/threadNum*i);
+				fileBlockData.setEndPos(length/threadNum*(i+1));
+				fileBlockQueue.add(fileBlockData);
+			}
 		}
 	}
 
