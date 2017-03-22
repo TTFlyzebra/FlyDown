@@ -36,9 +36,7 @@ public class SingleDownTask implements IFileReQuest,IFileBlockReQuestListener{
 
 	/**
 	 * 构造函数，生成实例
-	 * 
-	 * @param url
-	 *            下载地址
+	 * @param url 下载地址
 	 */
 	public SingleDownTask(String url) {
 		downUrl = url;
@@ -103,8 +101,8 @@ public class SingleDownTask implements IFileReQuest,IFileBlockReQuestListener{
 //			
 //		}
 		
-		for(FileBlock fileBlock:fileBlockTasks.getFileBlocks()){
-			TaskFactory.creat(downUrl).setFileBlock(fileBlock).setSingleDownTask(this).setFileBlockEnvent(this).handle();
+		for(FileBlock1 fileBlock:fileBlockTasks.getFileBlocks()){
+			TaskFactory.creat(downUrl).setFileBlock(fileBlock).setSingleDownTask(this).setFileBlockReQuestListener(this).handle();
 		}
 		
 		//运行下载线程
@@ -112,11 +110,11 @@ public class SingleDownTask implements IFileReQuest,IFileBlockReQuestListener{
 	}
 
 	@Override
-	public void Error(FileBlock fileBlock, int ErrorCode) {
+	public void Error(FileBlock1 fileBlock, int ErrorCode) {
 	}
 
 	@Override
-	public void Finish(FileBlock fileBlock) {
+	public void Finish(FileBlock1 fileBlock) {
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.flyzebra.flydown.network;
 
-import com.flyzebra.flydown.request.FileBlock;
+import com.flyzebra.flydown.file.FileBlock;
+import com.flyzebra.flydown.request.FileBlock1;
 import com.flyzebra.flydown.request.IFileBlockReQuestListener;
 import com.flyzebra.flydown.request.SingleDownTask;
 
@@ -11,14 +12,20 @@ import com.flyzebra.flydown.request.SingleDownTask;
 */
 public interface IHandleTask {
 	
+	IHandleTask setUrl(String downUrl);
+	
+	IHandleTask setSaveFile(String saveFile);
+	
 	IHandleTask setFileBlock(FileBlock fileBlock);
 	
+	IHandleTask setFileBlockReQuestListener(IFileBlockReQuestListener iFileBlockEnvent); 
+	
 	IHandleTask setSingleDownTask(SingleDownTask singleDownTask);
+	
+	IHandleTask setFileBlock(FileBlock1 fileBlock);
 	/**
 	 * 處理下載
 	 * @param downRequest
 	 */
 	void handle();
-
-	IHandleTask setFileBlockEnvent(IFileBlockReQuestListener iFileBlockEnvent); 
 }

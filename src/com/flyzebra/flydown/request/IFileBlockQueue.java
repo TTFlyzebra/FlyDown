@@ -13,11 +13,14 @@ public interface IFileBlockQueue {
 
 	IFileBlockQueue setTempFile(String tempFile);
 
+	IFileBlockQueue setThreadNum(int threadNum);
+
+	IFileBlockQueue listener(IFileBlockReQuestListener iFileBlockReQuestListener);
+
 	void init();
 
 	boolean isEmpty();
 
 	void doNextQueue();
 
-	IFileBlockQueue listener(IFileBlockReQuestListener iFileBlockReQuestListener);
 }

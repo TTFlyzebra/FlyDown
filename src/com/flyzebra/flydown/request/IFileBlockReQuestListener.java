@@ -8,7 +8,7 @@ package com.flyzebra.flydown.request;
  */
 public interface IFileBlockReQuestListener {
 
-	public void Error(FileBlock fileBlock, int ErrorCode);
+	public void Error(FileBlock1 fileBlock, int ErrorCode);
 
-	public void Finish(FileBlock fileBlock);
+	public void Finish(FileBlock1 fileBlock);
 }

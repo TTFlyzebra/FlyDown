@@ -15,29 +15,29 @@ import com.flyzebra.flydown.utils.HttpUtils;
  */
 public class FileBlockList {
 	private String downUrl;
-	private List<FileBlock> fileBlocks = new ArrayList<>();
+	private List<FileBlock1> fileBlocks = new ArrayList<>();
 
 	public FileBlockList(String downUrl, int threadNum) {
 		this.downUrl = downUrl;
 		String fileName = EncodeHelper.md5(downUrl)+".tmp";
 		String str = FileUtils.readFile(fileName);
 		if (str != null) {
-			String blockStrs[] = str.split(FileBlock.SPLIT_A);
+			String blockStrs[] = str.split(FileBlock1.SPLIT_A);
 			for (int i = 0; i < blockStrs.length; i++) {
-				FileBlock fileBlock = FileBlock.create(blockStrs[i]);
+				FileBlock1 fileBlock = FileBlock1.create(blockStrs[i]);
 				if (fileBlock != null) {
 					fileBlocks.add(fileBlock);
 				}
 			}
 		}else{
 			long length = HttpUtils.getLength(downUrl);
-			FileBlock fileBlock = new FileBlock(0, length);
+			FileBlock1 fileBlock = new FileBlock1(0, length);
 			fileBlocks.add(fileBlock);
 		}
 
 	}
 
-	public List<FileBlock> getFileBlocks() {
+	public List<FileBlock1> getFileBlocks() {
 		return fileBlocks;
 	}
 

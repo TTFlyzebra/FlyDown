@@ -8,7 +8,7 @@ import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import com.flyzebra.flydown.request.FileBlock;
+import com.flyzebra.flydown.request.FileBlock1;
 import com.flyzebra.flydown.request.IFileReQuestListener;
 import com.flyzebra.flydown.utils.CloseableUtil;
 import com.flyzebra.flydown.utils.FlyLog;
@@ -24,8 +24,8 @@ public class HttpTask implements Runnable {
 	private String saveFile;
 	private String downUrl;
 	private IFileReQuestListener iDownListener;
-	private FileBlock fileBlock;
-	public HttpTask(String downUrl,String saveFile,IFileReQuestListener iDownListener,FileBlock fileBlock) {
+	private FileBlock1 fileBlock;
+	public HttpTask(String downUrl,String saveFile,IFileReQuestListener iDownListener,FileBlock1 fileBlock) {
 		this.downUrl = downUrl;
 		this.saveFile = saveFile;
 		this.iDownListener = iDownListener;

@@ -22,8 +22,9 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 	private int threadNum = 1;
 	private IFileReQuestListener iFileReQuestListener;
 	private IFileBlockQueue iFileBlockQueue;
-	
-	private ExecutorService executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0, TimeUnit.SECONDS, new SynchronousQueue<Runnable>());
+
+	private ExecutorService executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0, TimeUnit.SECONDS,
+			new SynchronousQueue<Runnable>());
 
 	@Override
 	public IFileReQuest setUrl(String downUrl) {
@@ -55,15 +56,15 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 	}
 
 	@Override
-	public void Error(FileBlock fileBlock, int ErrorCode) {
+	public void Error(FileBlock1 fileBlock, int ErrorCode) {
 		iFileReQuestListener.Error(downUrl, ErrorCode);
 	}
 
 	@Override
-	public void Finish(FileBlock fileBlock) {
-		if(iFileBlockQueue.isEmpty()){
+	public void Finish(FileBlock1 fileBlock) {
+		if (iFileBlockQueue.isEmpty()) {
 			iFileReQuestListener.Finish(downUrl);
-		}else{
+		} else {
 			iFileBlockQueue.doNextQueue();
 		}
 	}
@@ -74,21 +75,21 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 			FlyLog.d("无效的下载地址!");
 			return;
 		}
-		
+
 		if (saveFile == null) {
-			saveFile = FlyDown.mCacheDir+downUrl.substring(downUrl.lastIndexOf('/') + 1, downUrl.length());
+			saveFile = FlyDown.mCacheDir + downUrl.substring(downUrl.lastIndexOf('/') + 1, downUrl.length());
 		}
-		
+
 		if (tempFile == null) {
-			tempFile = "."+FlyDown.mCacheDir+saveFile.substring(saveFile.lastIndexOf('/') + 1, saveFile.length())+".tmp";
+			tempFile = "." + FlyDown.mCacheDir + saveFile.substring(saveFile.lastIndexOf('/') + 1, saveFile.length()) + ".tmp";
 		}
-		
-		if(iFileBlockQueue == null){
+
+		if (iFileBlockQueue == null) {
 			iFileBlockQueue = new SimpleFileBlockQueue();
-			iFileBlockQueue.setUrl(downUrl).setSaveFile(saveFile).setTempFile(tempFile).listener(this).init();
 		}
-		
-		for(int i=0;i<threadNum;i++){
+		iFileBlockQueue.setUrl(downUrl).setSaveFile(saveFile).setTempFile(tempFile).setThreadNum(threadNum).listener(this).init();
+
+		for (int i = 0; i < threadNum; i++) {
 			iFileBlockQueue.doNextQueue();
 		}
 
