@@ -17,7 +17,7 @@ public interface IFileBlockQueue {
 
 	IFileBlockQueue listener(IFileBlockReQuestListener iFileBlockReQuestListener);
 
-	void init();
+	void createQueue();
 
 	boolean isEmpty();
 

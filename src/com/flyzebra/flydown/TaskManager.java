@@ -1,13 +1,11 @@
 
 package com.flyzebra.flydown;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import com.flyzebra.flydown.request.IFileReQuest;
-import com.flyzebra.flydown.request.SingleDownTask;
+import com.flyzebra.flydown.request.SimpleFileReQuest;
 
 /** 
 * 功能说明：下载任务管理，添加下载任务，删除下载任务，暂停下载任务
@@ -27,7 +25,7 @@ public class TaskManager {
 	 * @return DownRequest实例
 	 */
 	public synchronized IFileReQuest addReQuest(String url) {
-		IFileReQuest fileQequest = new SingleDownTask(url);
+		IFileReQuest fileQequest = new SimpleFileReQuest(url);
 		fileRequestQueue.add(fileQequest);
 		return fileQequest;
 	}

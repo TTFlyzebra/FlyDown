@@ -1,9 +1,7 @@
 package com.flyzebra.flydown.network;
 
 import com.flyzebra.flydown.file.FileBlock;
-import com.flyzebra.flydown.request.FileBlock1;
 import com.flyzebra.flydown.request.IFileBlockReQuestListener;
-import com.flyzebra.flydown.request.SingleDownTask;
 
 /** 
 * 功能说明：
@@ -19,10 +17,6 @@ public interface IHandleTask {
 	IHandleTask setFileBlock(FileBlock fileBlock);
 	
 	IHandleTask setFileBlockReQuestListener(IFileBlockReQuestListener iFileBlockEnvent); 
-	
-	IHandleTask setSingleDownTask(SingleDownTask singleDownTask);
-	
-	IHandleTask setFileBlock(FileBlock1 fileBlock);
 	/**
 	 * 處理下載
 	 * @param downRequest

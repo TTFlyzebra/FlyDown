@@ -1,5 +1,7 @@
 package com.flyzebra.flydown.request;
 
+import com.flyzebra.flydown.file.FileBlock;
+
 /**
  * 功能说明：
  * 
@@ -8,7 +10,9 @@ package com.flyzebra.flydown.request;
  */
 public interface IFileBlockReQuestListener {
 
-	public void Error(FileBlock1 fileBlock, int ErrorCode);
+	public void error(FileBlock fileBlock, int ErrorCode);
 
-	public void Finish(FileBlock1 fileBlock);
+	public void finish(FileBlock fileBlock);
+	
+	public void progress(FileBlock fileBlock);
 }

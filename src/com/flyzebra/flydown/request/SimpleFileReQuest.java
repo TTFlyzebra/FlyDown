@@ -6,6 +6,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.flyzebra.flydown.FlyDown;
+import com.flyzebra.flydown.file.FileBlock;
 import com.flyzebra.flydown.utils.FlyLog;
 
 /**
@@ -22,6 +23,10 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 	private int threadNum = 1;
 	private IFileReQuestListener iFileReQuestListener;
 	private IFileBlockQueue iFileBlockQueue;
+	
+	public SimpleFileReQuest(String downUrl){
+		this.downUrl = downUrl;
+	}
 
 	private ExecutorService executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0, TimeUnit.SECONDS,
 			new SynchronousQueue<Runnable>());
@@ -56,20 +61,6 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 	}
 
 	@Override
-	public void Error(FileBlock1 fileBlock, int ErrorCode) {
-		iFileReQuestListener.Error(downUrl, ErrorCode);
-	}
-
-	@Override
-	public void Finish(FileBlock1 fileBlock) {
-		if (iFileBlockQueue.isEmpty()) {
-			iFileReQuestListener.Finish(downUrl);
-		} else {
-			iFileBlockQueue.doNextQueue();
-		}
-	}
-
-	@Override
 	public void run() {
 		if (downUrl == null) {
 			FlyLog.d("无效的下载地址!");
@@ -87,12 +78,31 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 		if (iFileBlockQueue == null) {
 			iFileBlockQueue = new SimpleFileBlockQueue();
 		}
-		iFileBlockQueue.setUrl(downUrl).setSaveFile(saveFile).setTempFile(tempFile).setThreadNum(threadNum).listener(this).init();
+		iFileBlockQueue.setUrl(downUrl).setSaveFile(saveFile).setTempFile(tempFile).setThreadNum(threadNum).listener(this).createQueue();
 
 		for (int i = 0; i < threadNum; i++) {
 			iFileBlockQueue.doNextQueue();
 		}
 
+	}
+	
+	@Override
+	public void error(FileBlock fileBlock, int ErrorCode) {
+		iFileReQuestListener.Error(downUrl, ErrorCode);
+	}
+
+	@Override
+	public void finish(FileBlock fileBlock) {
+		if (iFileBlockQueue.isEmpty()) {
+			iFileReQuestListener.Finish(downUrl);
+		} else {
+			iFileBlockQueue.doNextQueue();
+		}
+	}
+
+	@Override
+	public void progress(FileBlock fileBlock) {
+		FlyLog.d("download = %d\n",fileBlock.getStaPos());
 	}
 
 }

@@ -29,7 +29,6 @@ public class SimpleFileBlockQueue implements IFileBlockQueue {
 
 	@Override
 	public void doNextQueue() {
-		// TODO Auto-generated method stub
 		if(!fileBlockQueue.isEmpty()){
 			IHandleTask iHandleTask =TaskFactory.creat(downUrl);
 			iHandleTask.setUrl(downUrl).setSaveFile(saveFile).setFileBlockReQuestListener(iFileBlockReQuestListener).setFileBlock(fileBlockQueue.poll()).handle();
@@ -67,7 +66,7 @@ public class SimpleFileBlockQueue implements IFileBlockQueue {
 	}
 
 	@Override
-	public void init() {
+	public void createQueue() {
 		String str = FileUtils.readFile(tempFile);
 		if (str != null) {
 			for (int i = 0; i < str.length(); i=i+48) {
@@ -79,8 +78,12 @@ public class SimpleFileBlockQueue implements IFileBlockQueue {
 			long length = HttpUtils.getLength(downUrl);
 			FileBlock fileBlockData = new FileBlock();
 			fileBlockData.setStaPos(0);
-			fileBlockData.setEndPos(length);
+			fileBlockData.setEndPos(length/2);
 			fileBlockQueue.add(fileBlockData);
+			FileBlock fileBlockData1 = new FileBlock();
+			fileBlockData1.setStaPos(length/2);
+			fileBlockData1.setEndPos(length);
+			fileBlockQueue.add(fileBlockData1);
 		}
 	}
 

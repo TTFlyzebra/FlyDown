@@ -13,7 +13,7 @@ public class TestMain{
 
 	public static void main(String[] args) {
 		FlyLog.d("-----start main-----\n");
-		String downUrl = "http://127.0.0.1:8080/video/tsy1.mp4";
+		String downUrl = "http://127.0.0.1/video/tsy1.mp4";
 		IFileReQuestListener listener = new IFileReQuestListener() {
 
 			@Override
