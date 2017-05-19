@@ -25,6 +25,9 @@ public class HttpUtils {
 			con = (HttpURLConnection) url.openConnection();
 			con.setRequestProperty("RANGE", "bytes=0-");
 			fileLength = con.getContentLengthLong();
+			if(con.getResponseCode()!=206){
+				fileLength = -1;
+			}
 		} catch (MalformedURLException e) {
 			FlyLog.d(e.toString());
 			e.printStackTrace();

@@ -13,7 +13,7 @@ public class TestMain{
 
 	public static void main(String[] args) {
 		FlyLog.d("-----start main-----\n");
-		String downUrl = "http://127.0.0.1/video/tsy1.mp4";
+		String downUrl = "http://127.0.0.1:8080/video/tsy.mp4";
 		IFileReQuestListener listener = new IFileReQuestListener() {
 
 			@Override
@@ -36,21 +36,8 @@ public class TestMain{
 				
 			}
 		};
-		FlyDown.load(downUrl).setThread(1000).listener(listener).goStart();
-		
-		
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy2.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy3.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy4.mp4").listener(listener).start();
-//		FlyDown.load("http://127.0.0.1:8080/video/tsy5.mp4").listener(listener).start();
-		
-		FlyLog.d("file l = %d \n",HttpUtils.getLength("http://127.0.0.1:8080/video/fly.avi"));
-		
-		FlyLog.d("-----end main-----\n");
-		
+		FlyDown.load(downUrl).setThread(10).listener(listener).goStart();		
+		FlyLog.d("file l = %d \n",HttpUtils.getLength("http://127.0.0.1:8080/flygo.lua"));		
+		FlyLog.d("-----end main-----\n");		
 	}
-	
-	
-	
-
 }

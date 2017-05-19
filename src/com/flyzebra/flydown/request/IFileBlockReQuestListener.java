@@ -15,4 +15,6 @@ public interface IFileBlockReQuestListener {
 	public void finish(FileBlock fileBlock);
 	
 	public void progress(FileBlock fileBlock);
+	
+	public void cancleTask(FileBlock fileBlock);
 }

@@ -5,11 +5,11 @@ package com.flyzebra.flydown.file;
 * @version 创建时间：2017年3月1日 下午1:47:37  
 */
 public class FileBlock {
-	public static final String SPLIT_A = "E";
-	public static final String SPLIT_B = "X";
+	//开始位置
 	private long staPos = 0;
+	//结速位置
 	private long endPos = 0;	
-	private int state = 0;
+	private int state = 0;//下载状态 0xff下载完成//下载状态0xfe 不支持断点续传
 	private int tag = 0;
 	private int order = 0;
 	public long getStaPos() {

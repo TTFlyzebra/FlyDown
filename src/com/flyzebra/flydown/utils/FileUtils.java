@@ -59,4 +59,20 @@ public class FileUtils {
 		}
 		return readStr;
 	}
+	
+	/**
+	 * 在线程中删除指定的文件
+	 * @param fileName
+	 */
+	public static void delFileInTread(final String fileName){
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				File file = new File(fileName);
+				if(file.exists()){
+					file.delete();
+				}
+			}
+		}).start();
+	}
 }

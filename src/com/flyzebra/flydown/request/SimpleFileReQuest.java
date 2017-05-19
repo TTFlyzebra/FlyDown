@@ -1,16 +1,19 @@
 package com.flyzebra.flydown.request;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import com.flyzebra.flydown.FlyDown;
 import com.flyzebra.flydown.file.FileBlock;
+import com.flyzebra.flydown.file.FileIO;
+import com.flyzebra.flydown.file.IFileIO;
+import com.flyzebra.flydown.utils.FileUtils;
 import com.flyzebra.flydown.utils.FlyLog;
 
 /**
- * 功能说明：
+ * 功能说明：单个文件下载请求
  * 
  * @author 作者：FlyZebra
  * @version 创建时间：2017年3月22日 上午10:03:57
@@ -20,18 +23,20 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 	private String downUrl;
 	private String saveFile;
 	private String tempFile;
-	private int threadNum = 1;
+	private int threadNum;
 	private IFileReQuestListener iFileReQuestListener;
 	private IFileBlockQueue iFileBlockQueue;
+
+	private IFileIO saveFileIO;
+	private IFileIO tempFileIO;
 	
-	//添加原子操作数判断下载是否完成
-	
-	public SimpleFileReQuest(String downUrl){
+	// 添加原子操作数判断下载是否完成
+
+	public SimpleFileReQuest(String downUrl) {
 		this.downUrl = downUrl;
 	}
 
-	private ExecutorService executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+	private ExecutorService executor = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 0, TimeUnit.SECONDS,new SynchronousQueue<Runnable>());
 
 	@Override
 	public SimpleFileReQuest setUrl(String downUrl) {
@@ -44,7 +49,7 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 		this.saveFile = saveFile;
 		return this;
 	}
-	
+
 	@Override
 	public SimpleFileReQuest setThread(int threadNum) {
 		this.threadNum = threadNum;
@@ -65,7 +70,7 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 
 	@Override
 	public void cancle() {
-
+		iFileBlockQueue.cancle();
 	}
 
 	@Override
@@ -80,20 +85,28 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 		}
 
 		if (tempFile == null) {
-			tempFile = "." + FlyDown.mCacheDir + saveFile.substring(saveFile.lastIndexOf('/') + 1, saveFile.length()) + ".tmp";
+			tempFile = FlyDown.mCacheDir + "." +saveFile.substring(saveFile.lastIndexOf('/') + 1, saveFile.length()) + ".log";
 		}
 
 		if (iFileBlockQueue == null) {
 			iFileBlockQueue = new SimpleFileBlockQueue();
 		}
-		iFileBlockQueue.setUrl(downUrl).setSaveFile(saveFile).setTempFile(tempFile).setThreadNum(threadNum).listener(this).createQueue();
+
+		try {
+			saveFileIO = new FileIO(saveFile);
+			tempFileIO = new FileIO(tempFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		iFileBlockQueue.setUrl(downUrl).setSaveFileIO(saveFileIO).setTempFileIO(tempFileIO).listener(this).createQueue();
 
 		for (int i = 0; i < threadNum; i++) {
 			iFileBlockQueue.doNextQueue();
 		}
 
 	}
-	
+
 	@Override
 	public void error(FileBlock fileBlock, int ErrorCode) {
 		iFileReQuestListener.Error(downUrl, ErrorCode);
@@ -101,8 +114,15 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 
 	@Override
 	public void finish(FileBlock fileBlock) {
-		if (iFileBlockQueue.isEmpty()) {
+		if (iFileBlockQueue.getBlockSum() == 0) {
 			iFileReQuestListener.Finish(downUrl);
+			try {
+				saveFileIO.close();
+				tempFileIO.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			FileUtils.delFileInTread(tempFile);
 		} else {
 			iFileBlockQueue.doNextQueue();
 		}
@@ -110,7 +130,19 @@ public class SimpleFileReQuest implements Runnable, IFileReQuest, IFileBlockReQu
 
 	@Override
 	public void progress(FileBlock fileBlock) {
-		FlyLog.d("download = %d\n",fileBlock.getStaPos());
+		// FlyLog.d("download = %d\n",fileBlock.getStaPos());
+	}
+
+	@Override
+	public void cancleTask(FileBlock fileBlock) {
+		if (iFileBlockQueue.getBlockSum() == 0) {
+			try {
+				saveFileIO.close();
+				tempFileIO.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} 
 	}
 
 }

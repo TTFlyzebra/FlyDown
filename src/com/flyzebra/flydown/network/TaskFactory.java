@@ -6,10 +6,10 @@ package com.flyzebra.flydown.network;
 * @version 创建时间：2017年3月1日 上午9:49:50  
 */
 public class TaskFactory {
-	public static IHandleTask creat(String url){
-		IHandleTask ihandleRequest = null;
+	public static IDownTask creat(String url){
+		IDownTask ihandleRequest = null;
 		if(url.indexOf("http://")==0){
-			ihandleRequest = new HttpRequest();
+			ihandleRequest = new HttpDownTask();
 		}
 		return ihandleRequest;		
 	}
